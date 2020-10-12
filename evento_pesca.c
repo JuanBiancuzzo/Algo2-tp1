@@ -5,12 +5,13 @@
 #define FORMATO "%[^;];%i;%i;%[^;]"
 
 int leer_pokemon(FILE* archivo, pokemon_t* pokemon) {
-	return fscanf(archivo, FORMATO, pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color);
+	return fscanf(archivo, FORMATO, &(pokemon->especie), &(pokemon->velocidad), &(pokemon->peso), &(pokemon->color));
 } 
 
 arrecife_t* crear_arrecife(const char* ruta_archivo) {
 	
 	arrecife_t* arrecife = malloc(sizeof(arrecife_t));
+	pokemon_t* p_pokemon = NULL;
 	pokemon_t pokemon_aux;
 
 	FILE* archivo = fopen(ruta_archivo, "r");
@@ -22,7 +23,9 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
 	while (leido == 4) {
 
-		
+		(*arrecife).pokemon = realloc(p_pokemon, (*arrecife).cantidad_pokemon + 1);
+		(*((arrecife).pokemon)+(*arrecife).cantidad_pokemon) = pokemon_aux;
+		((*arrecife).cantidad_pokemon)++;
 
 		leido = leer_pokemon(archivo, &pokemon_aux);
 	}
