@@ -55,10 +55,34 @@ acuario_t* crear_acuario() {
 	if (acuario->pokemon == NULL)
 		return NULL;
 
+	acuario->cantidad_pokemon = 0;
+
 	return acuario;
 }
 
 int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccionar_pokemon) (pokemon_t*), int cant_seleccion) {
+
+	int transladables = 0;
+
+	for (int i = 0; i < arrecife->cantidad_pokemon; i ++) {
+		if (seleccionar_pokemon(arrecife->pokemones + i))
+			transladables++;
+	}
+
+	if (transladables < cant_seleccion)
+		return 0;
+
+	int i = 0;
+	transladables = 0;
+
+	while (i < arrecife->cantidad_pokemon && transladables < cant_seleccion) {
+
+		if (seleccionar_pokemon(arrecife->pokemones + i)) {
+			//transladar
+			transladables++;
+		}
+
+	}
 	return 0;
 }
 
