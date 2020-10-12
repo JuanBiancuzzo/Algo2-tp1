@@ -15,7 +15,7 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 	pokemon_t pokemon_aux;
 
 	if (arrecife == NULL)
-		return arrecife;
+		return NULL;
 
 	FILE* archivo = fopen(ruta_archivo, "r");
 
@@ -26,18 +26,35 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
 	while (leido == 4) {
 
-		arrecife->pokemon = realloc(p_pokemon, (size_t) (arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
+		p_pokemon = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
+
+		if (p_pokemon == NULL) { 
+			fclose(archivo);
+			return arrecife;
+		}
+
+		arrecife->pokemon = p_pokemon;
 		(*(arrecife->pokemon + arrecife->cantidad_pokemon)) = pokemon_aux;
 		(arrecife->cantidad_pokemon)++;
 
 		leido = leer_pokemon(archivo, &pokemon_aux);
 	}
 
+	fclose(archivo);
 	return arrecife;
 }
 
 acuario_t* crear_acuario() {
 	acuario_t* acuario = malloc(sizeof(acuario_t));
+
+	if (acuario == NULL)
+		return NULL;
+
+	acuario->pokemon = malloc(sizeof(pokemon_t));
+
+	if (acuario->pokemon == NULL)
+		return NULL;
+
 	return acuario;
 }
 
