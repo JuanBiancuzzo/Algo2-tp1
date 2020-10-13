@@ -100,7 +100,10 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 	return 0;
 }
 
-void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)) {}
+void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)) {
+	for (int i = 0; i < arrecife->cantidad_pokemon; i++) 
+		mostrar_pokemon(arrecife->pokemon + i);
+}
 
 int guardar_datos_acuario(acuario_t* acuario, const char* nombre_archivo) {
 	return 0;
