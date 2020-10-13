@@ -124,7 +124,13 @@ int guardar_datos_acuario(acuario_t* acuario, const char* nombre_archivo) {
 	return 0;
 }
 
-void liberar_acuario(acuario_t* acuario) {}
+void liberar_acuario(acuario_t* acuario) {
+	free(acuario->pokemon);
+	free(acuario);
+}
 
-void liberar_arrecife(arrecife_t* arrecife) {}
+void liberar_arrecife(arrecife_t* arrecife) {
+	free(arrecife->pokemon);
+	free(arrecife);
+}
 
