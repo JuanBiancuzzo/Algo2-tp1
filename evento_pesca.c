@@ -2,10 +2,15 @@
 
 #include "evento_pesca.h"
 
-#define FORMATO "%[^;];%i;%i;%[^;]"
+#define FORMATO_LECTURA "%[^;];%i;%i;%[^;]"
+#define FORMATO_ESCRITURA "%s;%i;%i;%s"
 
 int leer_pokemon(FILE* archivo, pokemon_t* pokemon) {
-	return fscanf(archivo, FORMATO, pokemon->especie, &(pokemon->velocidad), &(pokemon->peso), pokemon->color);
+	return fscanf(archivo, FORMATO_LECTURA, pokemon->especie, &(pokemon->velocidad), &(pokemon->peso), pokemon->color);
+} 
+
+int escribir_pokemon(FILE* archivo, pokemon_t* pokemon) {
+	return fprintf(archivo, FORMATO_ESCRITURA, pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color);
 } 
 
 arrecife_t* crear_arrecife(const char* ruta_archivo) {
@@ -106,6 +111,16 @@ void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)) 
 }
 
 int guardar_datos_acuario(acuario_t* acuario, const char* nombre_archivo) {
+
+	FILE* archivo = fopen(nombre_archivo, "w");
+
+	if (archivo == NULL)
+		return -1;
+
+	for (int i = 0; i < acuario->cantidad_pokemon; i++)
+		escribir_pokemon(archivo, (acuario->pokemon + i));
+
+	fclose(archivo);
 	return 0;
 }
 

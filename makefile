@@ -8,7 +8,7 @@ build: main.c
 	$(CC) $(CFLAGS) *.c -o $(NAME)
 
 exe: build
-	./$(NAME) pokemon.csv
+	./$(NAME) pokemon_arrecife.csv pokemon_acuario.csv 
 
 leak: build
 	$(VAL) $(VFLAGS) ./$(NAME)
