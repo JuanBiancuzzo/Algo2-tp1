@@ -50,11 +50,6 @@ acuario_t* crear_acuario() {
 	if (acuario == NULL)
 		return NULL;
 
-	acuario->pokemon = malloc(sizeof(pokemon_t));
-
-	if (acuario->pokemon == NULL)
-		return NULL;
-
 	acuario->cantidad_pokemon = 0;
 
 	return acuario;
@@ -65,23 +60,42 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 	int transladables = 0;
 
 	for (int i = 0; i < arrecife->cantidad_pokemon; i ++) {
-		if (seleccionar_pokemon(arrecife->pokemones + i))
+		if (seleccionar_pokemon(arrecife->pokemon + i))
 			transladables++;
 	}
 
 	if (transladables < cant_seleccion)
-		return 0;
+		return -1;
 
 	int i = 0;
 	transladables = 0;
 
 	while (i < arrecife->cantidad_pokemon && transladables < cant_seleccion) {
+		if (seleccionar_pokemon(arrecife->pokemon + i)) {
 
-		if (seleccionar_pokemon(arrecife->pokemones + i)) {
-			//transladar
+			pokemon_t* aux;
+			aux = realloc(acuario->pokemon + i, (size_t) (acuario->cantidad_pokemon + 1));
+
+			if (aux == NULL)
+				return -1;
+			(acuario->pokemon) = aux;
+
+			*(acuario->pokemon + acuario->cantidad_pokemon) = *(arrecife->pokemon + i);
+			acuario->cantidad_pokemon++;
+
+			for (int j = i; i < arrecife->cantidad_pokemon; i++) 
+				*(arrecife->pokemon + j) = *(arrecife->pokemon + j + 1); 
+			
+			aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon - 1));
+
+			if (aux == NULL)
+				return -1;
+			(arrecife->pokemon) = aux;
+
+			arrecife->cantidad_pokemon--;
 			transladables++;
 		}
-
+		i++;
 	}
 	return 0;
 }
