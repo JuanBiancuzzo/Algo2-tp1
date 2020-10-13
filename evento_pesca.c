@@ -2,8 +2,8 @@
 
 #include "evento_pesca.h"
 
-#define FORMATO_LECTURA "%[^;];%i;%i;%[^;]"
-#define FORMATO_ESCRITURA "%s;%i;%i;%s"
+#define FORMATO_LECTURA "%[^;];%i;%i;%[^\n]\n"
+#define FORMATO_ESCRITURA "%s;%i;%i;%s\n"
 
 int leer_pokemon(FILE* archivo, pokemon_t* pokemon) {
 	return fscanf(archivo, FORMATO_LECTURA, pokemon->especie, &(pokemon->velocidad), &(pokemon->peso), pokemon->color);
@@ -16,7 +16,6 @@ int escribir_pokemon(FILE* archivo, pokemon_t* pokemon) {
 arrecife_t* crear_arrecife(const char* ruta_archivo) {
 	
 	arrecife_t* arrecife = malloc(sizeof(arrecife_t));
-	pokemon_t* p_pokemon = NULL;
 	pokemon_t pokemon_aux;
 
 	if (arrecife == NULL)
@@ -29,8 +28,11 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 	
 	int leido = leer_pokemon(archivo, &pokemon_aux);
 
+	arrecife->pokemon = NULL;
+
 	while (leido == 4) {
 
+		pokemon_t* p_pokemon;
 		p_pokemon = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
 		if (p_pokemon == NULL) { 
@@ -79,7 +81,7 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 		if (seleccionar_pokemon(arrecife->pokemon + i)) {
 
 			pokemon_t* aux;
-			aux = realloc(acuario->pokemon + i, (size_t) (acuario->cantidad_pokemon + 1));
+			aux = realloc(acuario->pokemon, (size_t) (acuario->cantidad_pokemon + 1));
 
 			if (aux == NULL)
 				return -1;
@@ -125,12 +127,14 @@ int guardar_datos_acuario(acuario_t* acuario, const char* nombre_archivo) {
 }
 
 void liberar_acuario(acuario_t* acuario) {
-	free(acuario->pokemon);
+	if (acuario->cantidad_pokemon > 0)
+		free(acuario->pokemon);
 	free(acuario);
 }
 
 void liberar_arrecife(arrecife_t* arrecife) {
-	free(arrecife->pokemon);
+	if (arrecife->cantidad_pokemon > 0)
+		free(arrecife->pokemon);
 	free(arrecife);
 }
 
