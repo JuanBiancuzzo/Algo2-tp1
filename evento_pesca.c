@@ -82,6 +82,7 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 	acuario->cantidad_pokemon = 0;
 
 	while (i < arrecife->cantidad_pokemon && transladables < cant_seleccion) {
+
 		if (seleccionar_pokemon(arrecife->pokemon + i)) {
 
 			pokemon_t* aux;
@@ -97,17 +98,19 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 			for (int j = i; i < arrecife->cantidad_pokemon; i++) 
 				*(arrecife->pokemon + j) = *(arrecife->pokemon + j + 1); 
 			
+			// por si acaso revisar ese menos uno
 			aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon - 1));
 
 			if (aux == NULL)
 				return -1;
+
 			(arrecife->pokemon) = aux;
 
-			arrecife->cantidad_pokemon--;
+			(arrecife->cantidad_pokemon)--;
 			transladables++;
-			i--;
+		} else {
+			i++;
 		}
-		i++;
 	}
 	return 0;
 }
@@ -132,13 +135,13 @@ int guardar_datos_acuario(acuario_t* acuario, const char* nombre_archivo) {
 }
 
 void liberar_acuario(acuario_t* acuario) {
-	if (acuario->cantidad_pokemon > 0)
+	//if (acuario->cantidad_pokemon > 0)
 		free(acuario->pokemon);
 	free(acuario);
 }
 
 void liberar_arrecife(arrecife_t* arrecife) {
-	if (arrecife->cantidad_pokemon > 0) 
+	//if (arrecife->cantidad_pokemon > 0) 
 		free(arrecife->pokemon);
 	free(arrecife);
 }
