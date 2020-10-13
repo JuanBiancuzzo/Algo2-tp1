@@ -31,9 +31,7 @@ int main(int argc, char* argv[]) {
 
 	bool (*seleccion_0) (pokemon_t*) = seleccionar_pokemon_0;
 
-	int i = trasladar_pokemon(arrecife, acuario, seleccion_0, 5);
-
-	printf("%i", i);
+	trasladar_pokemon(arrecife, acuario, seleccion_0, 5);
 
 	liberar_arrecife(arrecife);
 	liberar_acuario(acuario);
