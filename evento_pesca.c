@@ -20,15 +20,16 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
 	if (arrecife == NULL)
 		return NULL;
-
-	FILE* archivo = fopen(ruta_archivo, "r");
-
-	if (archivo == NULL)
-		return NULL;
 	
 	arrecife->pokemon = NULL;
 	arrecife->cantidad_pokemon = 0;
 
+	//FILE* archivo = fopen("pokemon_arrecife.csv", "r");
+	FILE* archivo = fopen(ruta_archivo, "r");
+
+	if (archivo == NULL) {
+		return arrecife;
+	}
 	int leido = leer_pokemon(archivo, &pokemon_aux);
 
 	while (leido == 4) {
@@ -37,6 +38,7 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 		p_pokemon = realloc(arrecife->pokemon, (size_t)(arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
 		if (p_pokemon == NULL) { 
+			printf("\n oh...\n");
 			fclose(archivo);
 			return arrecife;
 		}
@@ -53,6 +55,7 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 }
 
 acuario_t* crear_acuario() {
+
 	acuario_t* acuario = malloc(sizeof(acuario_t));
 
 	if (acuario == NULL)
@@ -95,11 +98,10 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 			*(acuario->pokemon + acuario->cantidad_pokemon) = *(arrecife->pokemon + i);
 			acuario->cantidad_pokemon++;
 
-			for (int j = i; i < arrecife->cantidad_pokemon; i++) 
+			for (int j = i; j < arrecife->cantidad_pokemon; j++) 
 				*(arrecife->pokemon + j) = *(arrecife->pokemon + j + 1); 
 			
-			// por si acaso revisar ese menos uno
-			aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon - 1));
+			aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon) * sizeof(pokemon_t));
 
 			if (aux == NULL)
 				return -1;
@@ -135,14 +137,18 @@ int guardar_datos_acuario(acuario_t* acuario, const char* nombre_archivo) {
 }
 
 void liberar_acuario(acuario_t* acuario) {
-	//if (acuario->cantidad_pokemon > 0)
-		free(acuario->pokemon);
-	free(acuario);
+	if (acuario != NULL) {
+		if (acuario->cantidad_pokemon > 0)
+			free(acuario->pokemon);
+		free(acuario);
+	}
 }
 
 void liberar_arrecife(arrecife_t* arrecife) {
-	//if (arrecife->cantidad_pokemon > 0) 
-		free(arrecife->pokemon);
-	free(arrecife);
+	if (arrecife != NULL) {
+		if (arrecife->cantidad_pokemon > 0) 
+			free(arrecife->pokemon);
+		free(arrecife);
+	}
 }
 
