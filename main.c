@@ -91,6 +91,7 @@ int main(int argc, char* argv[]) {
 		for (int i = 0; i < 5; i++) {
 			trasladar_pokemon(arrecife, acuario, seleccionar_pokemon[i], 5);
 			censar_arrecife(arrecife, mostrar_pokemon[i]);
+			guardar_datos_acuario(acuario, argv[2]);
 			printf("\n\n");
 		}
 	}
