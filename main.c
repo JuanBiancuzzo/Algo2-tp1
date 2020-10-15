@@ -4,6 +4,9 @@
 
 #include "evento_pesca.h"
 
+#define FUNCIONES_SELEC 5
+#define FUNCIONES_MOSTAR 5
+
 bool selec_pokemon_0(pokemon_t* pokemon) {
 	return (strlen(pokemon->especie) > 7);
 }
@@ -66,12 +69,23 @@ void mostrar_arrecife_4(pokemon_t* pokemon) {
 		printf("-");
 }
 
+void informacion_entrada (int argc, char* argv[]) {
+	if (argc < 1)
+		strcpy(argv[1], "pokemon_arrecife.csv");
+	if (argc < 2)
+		strcpy(argv[2], "pokemon_acuario.csv");
+	argc = 2;
+}
+
 int main(int argc, char* argv[]) {
 
 	arrecife_t* arrecife = crear_arrecife(argv[1]);
 	acuario_t* acuario = crear_acuario();
 
-	bool (*seleccionar_pokemon [5]) (pokemon_t*);
+	int iteraciones = 5;
+	int cant_seleccion = 5;
+
+	bool (*seleccionar_pokemon [FUNCIONES_SELEC]) (pokemon_t*);
 
 	seleccionar_pokemon[0] = selec_pokemon_0; 
 	seleccionar_pokemon[1] = selec_pokemon_1; 
@@ -79,7 +93,7 @@ int main(int argc, char* argv[]) {
 	seleccionar_pokemon[3] = selec_pokemon_3; 
 	seleccionar_pokemon[4] = selec_pokemon_4; 
 
-	void (*mostrar_pokemon[5]) (pokemon_t*);
+	void (*mostrar_pokemon[FUNCIONES_MOSTAR]) (pokemon_t*);
 
 	mostrar_pokemon[0] = mostrar_arrecife_0;
 	mostrar_pokemon[1] = mostrar_arrecife_1;
@@ -88,13 +102,14 @@ int main(int argc, char* argv[]) {
 	mostrar_pokemon[4] = mostrar_arrecife_4;
 
 	if (arrecife != NULL || acuario != NULL) {
-		for (int i = 0; i < 5; i++) {
-			trasladar_pokemon(arrecife, acuario, seleccionar_pokemon[i], 5);
-			censar_arrecife(arrecife, mostrar_pokemon[i]);
-			guardar_datos_acuario(acuario, argv[2]);
+		for (int i = 0; i < iteraciones; i++) {
+			trasladar_pokemon(arrecife, acuario, seleccionar_pokemon[i%FUNCIONES_SELEC], cant_seleccion);
+			censar_arrecife(arrecife, mostrar_pokemon[i%FUNCIONES_MOSTAR]);
 			printf("\n\n");
 		}
 	}
+
+	guardar_datos_acuario(acuario, argv[2]);
 
 	liberar_arrecife(arrecife);
 	liberar_acuario(acuario);
