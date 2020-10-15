@@ -61,6 +61,7 @@ acuario_t* crear_acuario() {
 	if (acuario == NULL)
 		return NULL;
 
+	acuario->pokemon = NULL;
 	acuario->cantidad_pokemon = 0;
 
 	return acuario;
@@ -81,8 +82,6 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 	int i = 0;
 	transladables = 0;
 
-	acuario->pokemon = NULL;
-	acuario->cantidad_pokemon = 0;
 
 	while (i < arrecife->cantidad_pokemon && transladables < cant_seleccion) {
 
@@ -101,7 +100,7 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 			for (int j = i; j < arrecife->cantidad_pokemon; j++) 
 				*(arrecife->pokemon + j) = *(arrecife->pokemon + j + 1); 
 			
-			aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon) * sizeof(pokemon_t));
+			aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
 			if (aux == NULL)
 				return -1;

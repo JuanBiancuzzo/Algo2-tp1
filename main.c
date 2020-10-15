@@ -61,8 +61,8 @@ void mostrar_arrecife_3(pokemon_t* pokemon) {
 
 void mostrar_arrecife_4(pokemon_t* pokemon) {
 
-	printf("\n\tE: %s, V: %i, P: %i, C: %s\n", pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color);
-	for (int i = 0; i < 55; i++) 
+	printf("\n\tE: %s, V: %i\n\tP: %i, C: %s\n", pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color);
+	for (int i = 0; i < 35; i++) 
 		printf("-");
 }
 
