@@ -9,7 +9,7 @@ build: main.c
 
 exe: build
 	clear
-	./$(NAME) pokemon_arrecife.csv pokemon_acuario.csv 
+	./$(NAME) pokemon_arrecife.csv pokemon_acuario.csv
 
 leak: build
 	clear
@@ -18,3 +18,8 @@ leak: build
 debug: build
 	clear
 	gdb ./$(NAME) -tui
+
+limpear_acuario: build pokemon_acuario.csv
+	rm pokemon_acuario.csv
+	touch pokemon_acuario.csv
+	clear

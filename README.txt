@@ -35,6 +35,9 @@
 	También en el makefile tenes un caso para esto, pones "make exe" y
 	ejecuta el archivo con esos dos archivos que mencioné antes
 
+  Como una nota aparte, también si pones "make limpear_acuario" elimina
+  el archivo pokemon_acuario.csv y lo crea de nuevo. Espero que ayude
+
 
     [Explicación breve de conceptos]
 
