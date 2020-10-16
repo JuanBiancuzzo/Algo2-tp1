@@ -87,11 +87,11 @@ int main(int argc, char* argv[]) {
 
 	bool (*seleccionar_pokemon [FUNCIONES_SELEC]) (pokemon_t*);
 
-	seleccionar_pokemon[0] = selec_pokemon_0; 
-	seleccionar_pokemon[1] = selec_pokemon_1; 
-	seleccionar_pokemon[2] = selec_pokemon_2; 
-	seleccionar_pokemon[3] = selec_pokemon_3; 
-	seleccionar_pokemon[4] = selec_pokemon_4; 
+	seleccionar_pokemon[0] = selec_pokemon_0;
+	seleccionar_pokemon[1] = selec_pokemon_1;
+	seleccionar_pokemon[2] = selec_pokemon_2;
+	seleccionar_pokemon[3] = selec_pokemon_3;
+	seleccionar_pokemon[4] = selec_pokemon_4;
 
 	void (*mostrar_pokemon[FUNCIONES_MOSTAR]) (pokemon_t*);
 

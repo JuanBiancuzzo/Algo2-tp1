@@ -7,20 +7,20 @@
 
 int leer_pokemon(FILE* archivo, pokemon_t* pokemon) {
 	return fscanf(archivo, FORMATO_LECTURA, pokemon->especie, &(pokemon->velocidad), &(pokemon->peso), pokemon->color);
-} 
+}
 
 int escribir_pokemon(FILE* archivo, pokemon_t* pokemon) {
 	return fprintf(archivo, FORMATO_ESCRITURA, pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color);
-} 
+}
 
 arrecife_t* crear_arrecife(const char* ruta_archivo) {
-	
+
 	arrecife_t* arrecife = malloc(sizeof(arrecife_t));
 	pokemon_t pokemon_aux;
 
 	if (arrecife == NULL)
 		return NULL;
-	
+
 	arrecife->pokemon = NULL;
 	arrecife->cantidad_pokemon = 0;
 
@@ -37,7 +37,7 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 		pokemon_t* p_pokemon;
 		p_pokemon = realloc(arrecife->pokemon, (size_t)(arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
-		if (p_pokemon == NULL) { 
+		if (p_pokemon == NULL) {
 			printf("\n oh...\n");
 			fclose(archivo);
 			return arrecife;
@@ -145,7 +145,7 @@ void liberar_acuario(acuario_t* acuario) {
 
 void liberar_arrecife(arrecife_t* arrecife) {
 	if (arrecife != NULL) {
-		if (arrecife->cantidad_pokemon > 0) 
+		if (arrecife->cantidad_pokemon > 0)
 			free(arrecife->pokemon);
 		free(arrecife);
 	}
