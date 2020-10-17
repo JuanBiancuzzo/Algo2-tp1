@@ -112,7 +112,7 @@ Si intentamos entender como es que esta notación funciona, desarmemos la escrit
 que tenemos **edificio** que es un puntero, como dije antes, al grupo de items que guarda, en este
 caso un edificio tiene tipos. Entonces cuando ponemos "edificio" estamos yendo a la planta baja
 de nuestro edificio.
-También tenemos un **+1** (que podría ser cualquier número** y eso nos dice cuantos items nos 
+También tenemos un **+1** (que podría ser cualquier número) y eso nos dice cuantos items nos 
 desplazamos. Sería ir al ascensor y apretar el número del piso que queres ir.
 Por último tenemos el ***()** que nos índica que tenemos que usar el valor que esta en esa dirección,
 y esto sería el equivalente a entrar al departamento.
