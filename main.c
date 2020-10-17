@@ -101,7 +101,7 @@ int main(int argc, char* argv[]) {
 	mostrar_pokemon[3] = mostrar_arrecife_3;
 	mostrar_pokemon[4] = mostrar_arrecife_4;
 
-	if (arrecife != NULL || acuario != NULL) {
+	if (arrecife != NULL && acuario != NULL) {
 		for (int i = 0; i < iteraciones; i++) {
 			trasladar_pokemon(arrecife, acuario, seleccionar_pokemon[i%FUNCIONES_SELEC], cant_seleccion);
 			censar_arrecife(arrecife, mostrar_pokemon[i%FUNCIONES_MOSTAR]);

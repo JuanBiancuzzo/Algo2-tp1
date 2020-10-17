@@ -24,11 +24,11 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 	arrecife->pokemon = NULL;
 	arrecife->cantidad_pokemon = 0;
 
-	//FILE* archivo = fopen("pokemon_arrecife.csv", "r");
 	FILE* archivo = fopen(ruta_archivo, "r");
 
 	if (archivo == NULL) {
-		return arrecife;
+    free(arrecife);
+		return NULL;
 	}
 	int leido = leer_pokemon(archivo, &pokemon_aux);
 
@@ -38,7 +38,6 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 		p_pokemon = realloc(arrecife->pokemon, (size_t)(arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
 		if (p_pokemon == NULL) {
-			printf("\n oh...\n");
 			fclose(archivo);
 			return arrecife;
 		}
@@ -99,7 +98,6 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 
 			for (int j = i; j < arrecife->cantidad_pokemon; j++) 
 				*(arrecife->pokemon + j) = *(arrecife->pokemon + j + 1); 
-			
 			aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
 			if (aux == NULL)
