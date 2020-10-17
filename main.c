@@ -107,9 +107,8 @@ int main(int argc, char* argv[]) {
 			censar_arrecife(arrecife, mostrar_pokemon[i%FUNCIONES_MOSTAR]);
 			printf("\n\n");
 		}
+    guardar_datos_acuario(acuario, argv[2]);
 	}
-
-	guardar_datos_acuario(acuario, argv[2]);
 
 	liberar_arrecife(arrecife);
 	liberar_acuario(acuario);

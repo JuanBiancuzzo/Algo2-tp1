@@ -1,28 +1,21 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "evento_pesca.h"
 
-#define FORMATO_LECTURA "%[^;];%i;%i;%[^\n]\n"
-#define FORMATO_ESCRITURA "%s;%i;%i;%s\n"
-
 int leer_pokemon(FILE* archivo, pokemon_t* pokemon) {
-	return fscanf(archivo, FORMATO_LECTURA, pokemon->especie, &(pokemon->velocidad), &(pokemon->peso), pokemon->color);
+	return fscanf(archivo, "%[^;];%i;%i;%[^\n]\n", pokemon->especie, &(pokemon->velocidad), &(pokemon->peso), pokemon->color);
 }
 
 int escribir_pokemon(FILE* archivo, pokemon_t* pokemon) {
-	return fprintf(archivo, FORMATO_ESCRITURA, pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color);
+	return fprintf(archivo, "%s;%i;%i;%s\n", pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color);
 }
 
 arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
-	arrecife_t* arrecife = malloc(sizeof(arrecife_t));
+	arrecife_t* arrecife;
+  pokemon_t* p_pokemon;
 	pokemon_t pokemon_aux;
-
-	if (arrecife == NULL)
-		return NULL;
-
-	arrecife->pokemon = NULL;
-	arrecife->cantidad_pokemon = 0;
 
 	FILE* archivo = fopen(ruta_archivo, "r");
 
@@ -34,13 +27,20 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 	int leido = leer_pokemon(archivo, &pokemon_aux);
 
   if (leido != 4) {
-    free(arrecife);
+    fclose(archivo);
     return NULL;
   }
 
+  arrecife = malloc(sizeof(arrecife_t));
+
+	if (arrecife == NULL)
+		return NULL;
+
+	arrecife->pokemon = NULL;
+	arrecife->cantidad_pokemon = 0;
+
 	while (leido == 4) {
 
-		pokemon_t* p_pokemon;
 		p_pokemon = realloc(arrecife->pokemon, (size_t)(arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
 		if (p_pokemon == NULL) {
@@ -49,7 +49,12 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 		}
 
 		arrecife->pokemon = p_pokemon;
-		(*(arrecife->pokemon + arrecife->cantidad_pokemon)) = pokemon_aux;
+
+    strcpy(arrecife->pokemon[arrecife->cantidad_pokemon].especie, pokemon_aux.especie);
+    arrecife->pokemon[arrecife->cantidad_pokemon].velocidad = pokemon_aux.velocidad;
+    arrecife->pokemon[arrecife->cantidad_pokemon].peso = pokemon_aux.peso;
+    strcpy(arrecife->pokemon[arrecife->cantidad_pokemon].color, pokemon_aux.color);
+
 		(arrecife->cantidad_pokemon)++;
 
 		leido = leer_pokemon(archivo, &pokemon_aux);
