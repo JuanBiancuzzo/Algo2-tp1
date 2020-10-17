@@ -46,7 +46,7 @@ También se puede usar make de esta forma:
 make build
 ```
 
-### ejecución
+### Ejecución
 
 Para ejecutarlo se tiene que usar la línea
 
