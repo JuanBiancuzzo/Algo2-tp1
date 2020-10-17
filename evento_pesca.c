@@ -19,10 +19,8 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
 	FILE* archivo = fopen(ruta_archivo, "r");
 
-	if (archivo == NULL) {
-    free(arrecife);
+	if (archivo == NULL) 
 		return NULL;
-	}
 
 	int leido = leer_pokemon(archivo, &pokemon_aux);
 
