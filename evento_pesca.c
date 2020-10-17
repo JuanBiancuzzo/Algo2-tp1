@@ -30,7 +30,13 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
     free(arrecife);
 		return NULL;
 	}
+
 	int leido = leer_pokemon(archivo, &pokemon_aux);
+
+  if (leido != 4) {
+    free(arrecife);
+    return NULL;
+  }
 
 	while (leido == 4) {
 
