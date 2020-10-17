@@ -107,7 +107,7 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 			*(acuario->pokemon + acuario->cantidad_pokemon) = *(arrecife->pokemon + i);
 			acuario->cantidad_pokemon++;
 
-			for (int j = i; j < arrecife->cantidad_pokemon; j++) 
+			for (int j = i; j < arrecife->cantidad_pokemon - 1; j++) 
 				*(arrecife->pokemon + j) = *(arrecife->pokemon + j + 1); 
 			aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
