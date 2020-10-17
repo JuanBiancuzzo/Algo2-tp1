@@ -62,7 +62,7 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
 	fclose(archivo);
 	return arrecife;
-¿
+}
 
 acuario_t* crear_acuario() {
 
