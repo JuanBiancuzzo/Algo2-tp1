@@ -114,7 +114,7 @@ caso un edificio tiene tipos. Entonces cuando ponemos "edificio" estamos yendo a
 de nuestro edificio.
 También tenemos un **+1** (que podría ser cualquier número** y eso nos dice cuantos items nos 
 desplazamos. Sería ir al ascensor y apretar el número del piso que queres ir.
-Por último tenemos el ***** que nos índica que tenemos que usar el valor que esta en esa dirección,
+Por último tenemos el ***()** que nos índica que tenemos que usar el valor que esta en esa dirección,
 y esto sería el equivalente a entrar al departamento.
 
 ### Punteros a funciones
