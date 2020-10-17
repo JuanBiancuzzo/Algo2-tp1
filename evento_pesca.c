@@ -15,8 +15,23 @@ int escribir_pokemon(FILE* archivo, pokemon_t* pokemon) {
 
 arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
-	arrecife_t* arrecife = malloc(sizeof(arrecife_t));
+	arrecife_t* arrecife;
+ 	pokemon_t* p_pokemon;
 	pokemon_t pokemon_aux;
+
+	FILE* archivo = fopen(ruta_archivo, "r");
+
+	if (archivo == NULL) 
+		return NULL;
+
+	int leido = leer_pokemon(archivo, &pokemon_aux);
+
+  	if (leido != 4) {
+    		fclose(archivo);
+    		return NULL;
+  	}
+
+  	arrecife = malloc(sizeof(arrecife_t));
 
 	if (arrecife == NULL)
 		return NULL;
@@ -24,23 +39,8 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 	arrecife->pokemon = NULL;
 	arrecife->cantidad_pokemon = 0;
 
-	FILE* archivo = fopen(ruta_archivo, "r");
-
-	if (archivo == NULL) {
-    free(arrecife);
-		return NULL;
-	}
-
-	int leido = leer_pokemon(archivo, &pokemon_aux);
-
-  if (leido != 4) {
-    free(arrecife);
-    return NULL;
-  }
-
 	while (leido == 4) {
 
-		pokemon_t* p_pokemon;
 		p_pokemon = realloc(arrecife->pokemon, (size_t)(arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
 		if (p_pokemon == NULL) {
@@ -49,7 +49,12 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 		}
 
 		arrecife->pokemon = p_pokemon;
-		(*(arrecife->pokemon + arrecife->cantidad_pokemon)) = pokemon_aux;
+
+    		strcpy(arrecife->pokemon[arrecife->cantidad_pokemon].especie, pokemon_aux.especie);
+    		arrecife->pokemon[arrecife->cantidad_pokemon].velocidad = pokemon_aux.velocidad;
+    		arrecife->pokemon[arrecife->cantidad_pokemon].peso = pokemon_aux.peso;
+    		strcpy(arrecife->pokemon[arrecife->cantidad_pokemon].color, pokemon_aux.color);
+
 		(arrecife->cantidad_pokemon)++;
 
 		leido = leer_pokemon(archivo, &pokemon_aux);
@@ -57,7 +62,7 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
 	fclose(archivo);
 	return arrecife;
-}
+¿
 
 acuario_t* crear_acuario() {
 
