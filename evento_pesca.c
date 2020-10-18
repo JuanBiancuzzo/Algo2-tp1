@@ -14,8 +14,13 @@ int escribir_pokemon(FILE* archivo, pokemon_t* pokemon) {
 arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
 	arrecife_t* arrecife;
+<<<<<<< HEAD
   pokemon_t* p_pokemon;
   pokemon_t pokemon_aux;
+=======
+ 	pokemon_t* p_pokemon;
+	pokemon_t pokemon_aux;
+>>>>>>> origin/master
 
 	FILE* archivo = fopen(ruta_archivo, "r");
 
@@ -24,10 +29,25 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
 	int leido = leer_pokemon(archivo, &pokemon_aux);
 
+<<<<<<< HEAD
   if (leido != 4) {
     fclose(archivo);
     return NULL;
   }
+=======
+  	if (leido != 4) {
+    		fclose(archivo);
+    		return NULL;
+  	}
+
+  	arrecife = malloc(sizeof(arrecife_t));
+
+	if (arrecife == NULL)
+		return NULL;
+
+	arrecife->pokemon = NULL;
+	arrecife->cantidad_pokemon = 0;
+>>>>>>> origin/master
 
   arrecife = malloc(sizeof(arrecife_t));
 
@@ -50,10 +70,17 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
 		arrecife->pokemon = p_pokemon;
 
+<<<<<<< HEAD
     strcpy(arrecife->pokemon[arrecife->cantidad_pokemon].especie, pokemon_aux.especie);
     arrecife->pokemon[arrecife->cantidad_pokemon].velocidad = pokemon_aux.velocidad;
     arrecife->pokemon[arrecife->cantidad_pokemon].peso = pokemon_aux.peso;
     strcpy(arrecife->pokemon[arrecife->cantidad_pokemon].color, pokemon_aux.color);
+=======
+    		strcpy(arrecife->pokemon[arrecife->cantidad_pokemon].especie, pokemon_aux.especie);
+    		arrecife->pokemon[arrecife->cantidad_pokemon].velocidad = pokemon_aux.velocidad;
+    		arrecife->pokemon[arrecife->cantidad_pokemon].peso = pokemon_aux.peso;
+    		strcpy(arrecife->pokemon[arrecife->cantidad_pokemon].color, pokemon_aux.color);
+>>>>>>> origin/master
 
 		(arrecife->cantidad_pokemon)++;
 
@@ -108,7 +135,11 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 			acuario->cantidad_pokemon++;
 
 			for (int j = i; j < arrecife->cantidad_pokemon - 1; j++) 
+<<<<<<< HEAD
 				arrecife->pokemon[j] = arrecife->pokemon[j + 1]; 
+=======
+				*(arrecife->pokemon + j) = *(arrecife->pokemon + j + 1); 
+>>>>>>> origin/master
 			aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
 			if (aux == NULL)
