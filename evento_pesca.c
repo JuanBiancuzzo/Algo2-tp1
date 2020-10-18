@@ -124,6 +124,7 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 
 	int transladables = 0, i = 0;
   bool valido = true;
+  pokemon_t* aux;
 
 	if (!cantidad_suficiente(arrecife->pokemon, arrecife->cantidad_pokemon, seleccionar_pokemon, cant_seleccion))
     valido = false;
@@ -132,7 +133,6 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 
 		if (seleccionar_pokemon(arrecife->pokemon + i)) {
 
-			pokemon_t* aux;
 			aux = realloc(acuario->pokemon, (size_t) (acuario->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
 			if (aux == NULL) {
@@ -144,15 +144,18 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 
         eliminar_pokemon(i, &(arrecife->cantidad_pokemon), arrecife->pokemon);
 
-        aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon) * sizeof(pokemon_t));
+        if (arrecife->cantidad_pokemon > 0) {
+          aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon) * sizeof(pokemon_t));
 
-        if (aux == NULL) {
-          valido = false;
+          if (aux == NULL) {
+            valido = false;
+          } else {
+            (arrecife->pokemon) = aux;
+            transladables++;
+          }
         } else {
-          (arrecife->pokemon) = aux;
-          transladables++;
+          free(arrecife->pokemon);
         }
-
       }
 
 		} else {
