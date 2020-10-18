@@ -4,7 +4,7 @@
 #include "evento_pesca.h"
 
 int leer_pokemon(FILE* archivo, pokemon_t* pokemon) {
-	return fscanf(archivo, "%[^;];%i;%i;%[^\n]\n", pokemon->especie, &(pokemon->velocidad), &(pokemon->peso), pokemon->color);
+	return fscanf(archivo, "%50[^;];%i;%i;%50[^\n]\n", pokemon->especie, &(pokemon->velocidad), &(pokemon->peso), pokemon->color);
 }
 
 int escribir_pokemon(FILE* archivo, pokemon_t* pokemon) {
@@ -15,7 +15,7 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
 	arrecife_t* arrecife;
   pokemon_t* p_pokemon;
-	pokemon_t pokemon_aux;
+  pokemon_t pokemon_aux;
 
 	FILE* archivo = fopen(ruta_archivo, "r");
 
@@ -31,8 +31,10 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
   arrecife = malloc(sizeof(arrecife_t));
 
-	if (arrecife == NULL)
+	if (arrecife == NULL) {
+    fclose(archivo);
 		return NULL;
+  }
 
 	arrecife->pokemon = NULL;
 	arrecife->cantidad_pokemon = 0;
@@ -105,8 +107,8 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 			*(acuario->pokemon + acuario->cantidad_pokemon) = *(arrecife->pokemon + i);
 			acuario->cantidad_pokemon++;
 
-			for (int j = i; j < arrecife->cantidad_pokemon; j++) 
-				*(arrecife->pokemon + j) = *(arrecife->pokemon + j + 1); 
+			for (int j = i; j < arrecife->cantidad_pokemon - 1; j++) 
+				arrecife->pokemon[j] = arrecife->pokemon[j + 1]; 
 			aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
 			if (aux == NULL)
