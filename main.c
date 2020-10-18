@@ -79,6 +79,8 @@ void informacion_entrada (int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) {
 
+	informacion_entrada(argc, argv);
+
 	arrecife_t* arrecife = crear_arrecife(argv[1]);
 	acuario_t* acuario = crear_acuario();
 
