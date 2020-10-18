@@ -7,6 +7,10 @@
 #define FUNCIONES_SELEC 5
 #define FUNCIONES_MOSTAR 5
 
+bool selec_pokemon(pokemon_t* pokemon) {
+	return true;
+}
+
 bool selec_pokemon_0(pokemon_t* pokemon) {
 	return (strlen(pokemon->especie) > 7);
 }
@@ -83,11 +87,11 @@ int main(int argc, char* argv[]) {
 	acuario_t* acuario = crear_acuario();
 
 	int iteraciones = 5;
-	int cant_seleccion = 5;
+	int cant_seleccion = 23;
 
 	bool (*seleccionar_pokemon [FUNCIONES_SELEC]) (pokemon_t*);
 
-	seleccionar_pokemon[0] = selec_pokemon_0;
+	seleccionar_pokemon[0] = selec_pokemon;
 	seleccionar_pokemon[1] = selec_pokemon_1;
 	seleccionar_pokemon[2] = selec_pokemon_2;
 	seleccionar_pokemon[3] = selec_pokemon_3;
@@ -107,10 +111,10 @@ int main(int argc, char* argv[]) {
 			censar_arrecife(arrecife, mostrar_pokemon[i%FUNCIONES_MOSTAR]);
 			printf("\n\n");
 		}
-    if (arrecife != NULL && acuario != NULL) {
-      guardar_datos_acuario(acuario, argv[2]);
-    }
 	}
+  if (arrecife != NULL && acuario != NULL) {
+    guardar_datos_acuario(acuario, argv[2]);
+  }
 
 	liberar_arrecife(arrecife);
 	liberar_acuario(acuario);

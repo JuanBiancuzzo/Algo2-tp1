@@ -13,7 +13,7 @@ exe: build
 
 leak: build
 	clear
-	$(VAL) $(VFLAGS) ./$(NAME)
+	$(VAL) $(VFLAGS) ./$(NAME) pokemon_arrecife.csv
 
 debug: build
 	clear

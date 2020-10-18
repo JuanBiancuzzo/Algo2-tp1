@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "evento_pesca.h"
 
@@ -11,11 +12,60 @@ int escribir_pokemon(FILE* archivo, pokemon_t* pokemon) {
 	return fprintf(archivo, "%s;%i;%i;%s\n", pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color);
 }
 
+/*
+ * Se encargará de copiar todos los campos del pokemon_secundario al principal
+ */
+void copiar_pokemon(pokemon_t* pokemon_principal, pokemon_t pokemon_secundario) {
+
+  strcpy(pokemon_principal->especie, pokemon_secundario.especie);
+  pokemon_principal->velocidad = pokemon_secundario.velocidad;
+  pokemon_principal->peso = pokemon_secundario.peso;
+  strcpy(pokemon_principal->color, pokemon_secundario.color);
+
+}
+
+/*
+ * A partir de una lista de pokemones eliminará al pokemon que esta en la posición pasada y moverá
+ * al resto un lugar para atras
+ */
+void eliminar_pokemon(int posicion_actual, int* tope, pokemon_t* lista_pokemones) {
+
+  for (int i = posicion_actual; i < (*tope) - 1; i++)
+    lista_pokemones[i] = lista_pokemones[i + 1];
+  (*tope)--;
+}
+
+/*
+ * Agrega un pokemon al final de la lista de pokemones
+ */
+void agregar_pokemon (pokemon_t pokemon, int* tope, pokemon_t* lista_pokemones) {
+  copiar_pokemon((lista_pokemones + (*tope)), pokemon);
+  (*tope)++;
+}
+
+/*
+ * Devuelve true si hay suficientes pokemones que cumplan la condición pasada por parametro, en caso
+ * que no se cumpla devolverá false
+ */
+bool cantidad_suficiente(pokemon_t* lista_pokemones, int tope, bool (*seleccionar_pokemon) (pokemon_t*), int cant_seleccion) {
+
+  int transladable = 0;
+
+  for (int i = 0; i < tope; i ++) {
+    if (seleccionar_pokemon(lista_pokemones + i))
+      transladable++;
+  }
+
+  return (transladable >= cant_seleccion);
+
+}
+
 arrecife_t* crear_arrecife(const char* ruta_archivo) {
 
 	arrecife_t* arrecife;
  	pokemon_t* p_pokemon;
 	pokemon_t pokemon_aux;
+  bool valido = true;
 
 	FILE* archivo = fopen(ruta_archivo, "r");
 
@@ -32,37 +82,26 @@ arrecife_t* crear_arrecife(const char* ruta_archivo) {
  	arrecife = malloc(sizeof(arrecife_t));
 
 	if (arrecife == NULL)
-		return NULL;
+    valido = false;
 
-	arrecife->pokemon = NULL;
-	arrecife->cantidad_pokemon = 0;
+  arrecife->pokemon = NULL;
+  arrecife->cantidad_pokemon = 0;
 
-  arrecife = malloc(sizeof(arrecife_t));
-
-	if (arrecife == NULL) {
-    fclose(archivo);
-		return NULL;
-  }
-
-	while (leido == 4) {
+	while (leido == 4 && valido) {
 
 		p_pokemon = realloc(arrecife->pokemon, (size_t)(arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
 		if (p_pokemon == NULL) {
-			fclose(archivo);
-			return arrecife;
-		}
+      valido = false;
+		} else {
 
-		arrecife->pokemon = p_pokemon;
+      arrecife->pokemon = p_pokemon;
+      copiar_pokemon(&(arrecife->pokemon[arrecife->cantidad_pokemon]), pokemon_aux);
+      (arrecife->cantidad_pokemon)++;
 
-    strcpy(arrecife->pokemon[arrecife->cantidad_pokemon].especie, pokemon_aux.especie);
-    arrecife->pokemon[arrecife->cantidad_pokemon].velocidad = pokemon_aux.velocidad;
-    arrecife->pokemon[arrecife->cantidad_pokemon].peso = pokemon_aux.peso;
-    strcpy(arrecife->pokemon[arrecife->cantidad_pokemon].color, pokemon_aux.color);
+      leido = leer_pokemon(archivo, &pokemon_aux);
 
-		(arrecife->cantidad_pokemon)++;
-
-		leido = leer_pokemon(archivo, &pokemon_aux);
+    }
 	}
 
 	fclose(archivo);
@@ -84,50 +123,46 @@ acuario_t* crear_acuario() {
 
 int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccionar_pokemon) (pokemon_t*), int cant_seleccion) {
 
-	int transladables = 0;
+	int transladables = 0, i = 0;
+  bool valido = true;
 
-	for (int i = 0; i < arrecife->cantidad_pokemon; i ++) {
-		if (seleccionar_pokemon(arrecife->pokemon + i))
-			transladables++;
-	}
-
-	if (transladables < cant_seleccion)
+	if (!cantidad_suficiente(arrecife->pokemon, arrecife->cantidad_pokemon, seleccionar_pokemon, cant_seleccion))
 		return -1;
 
-	int i = 0;
-	transladables = 0;
-
-
-	while (i < arrecife->cantidad_pokemon && transladables < cant_seleccion) {
+	while (i < arrecife->cantidad_pokemon && transladables < cant_seleccion && valido) {
 
 		if (seleccionar_pokemon(arrecife->pokemon + i)) {
 
 			pokemon_t* aux;
 			aux = realloc(acuario->pokemon, (size_t) (acuario->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
-			if (aux == NULL)
-				return -1;
-			(acuario->pokemon) = aux;
+			if (aux == NULL) {
+        valido = false;
+      } else {
 
-			*(acuario->pokemon + acuario->cantidad_pokemon) = *(arrecife->pokemon + i);
-			acuario->cantidad_pokemon++;
+        (acuario->pokemon) = aux;
+        agregar_pokemon(arrecife->pokemon[i], &(acuario->cantidad_pokemon), acuario->pokemon);
 
-			for (int j = i; j < arrecife->cantidad_pokemon - 1; j++) 
-				arrecife->pokemon[j] = arrecife->pokemon[j + 1]; 
+        eliminar_pokemon(i, &(arrecife->cantidad_pokemon), arrecife->pokemon);
 
-			aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
+        aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
 
-			if (aux == NULL)
-				return -1;
+        if (aux == NULL) {
+          valido = false;
+        } else {
+          (arrecife->pokemon) = aux;
+          transladables++;
+        }
 
-			(arrecife->pokemon) = aux;
+      }
 
-			(arrecife->cantidad_pokemon)--;
-			transladables++;
 		} else {
 			i++;
 		}
 	}
+
+  if (!valido)
+    return -1;
 	return 0;
 }
 
