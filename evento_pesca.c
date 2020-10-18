@@ -57,7 +57,6 @@ bool cantidad_suficiente(pokemon_t* lista_pokemones, int tope, bool (*selecciona
   }
 
   return (transladable >= cant_seleccion);
-
 }
 
 arrecife_t* crear_arrecife(const char* ruta_archivo) {
@@ -127,7 +126,7 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
   bool valido = true;
 
 	if (!cantidad_suficiente(arrecife->pokemon, arrecife->cantidad_pokemon, seleccionar_pokemon, cant_seleccion))
-		return -1;
+    valido = false;
 
 	while (i < arrecife->cantidad_pokemon && transladables < cant_seleccion && valido) {
 
@@ -145,7 +144,7 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
 
         eliminar_pokemon(i, &(arrecife->cantidad_pokemon), arrecife->pokemon);
 
-        aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon + 1) * sizeof(pokemon_t));
+        aux = realloc(arrecife->pokemon, (size_t) (arrecife->cantidad_pokemon) * sizeof(pokemon_t));
 
         if (aux == NULL) {
           valido = false;
